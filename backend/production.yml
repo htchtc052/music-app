@@ -1,0 +1,4 @@
+services:
+  nest-api:
+    build:
+      target: prod
