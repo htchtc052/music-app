@@ -1,6 +1,0 @@
-services:
-  nest-api:
-    build:
-      target: test-watch
-    volumes:
-      - .git:/app/.git/

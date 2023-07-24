@@ -1,35 +1,46 @@
-FROM node:18.4-alpine AS base
-WORKDIR /app
-COPY package*.json ./
-COPY prisma ./prisma/
+FROM node:20.4-alpine AS base
+
+# build for dev
 
 FROM base as dev
+
+WORKDIR /app
+
 ENV NODE_ENV=dev
-RUN npm install
+
+COPY  package*.json ./
+
+RUN npm ci
+
+COPY  . .
+
+RUN npm run prisma:generate
+
+
+# BUILD FOR PRODUCTION
+
+FROM base As build
+
+WORKDIR /app
+
+COPY package*.json ./
+
+ENV NODE_ENV PRODUCTION 
+
+COPY --from=dev /app/node_modules ./node_modules
+
 COPY . .
-CMD ["npm", "run", "start:dev"]
 
-FROM dev AS test
-ENV NODE_ENV=test
-CMD [ "npm", "run", "test"]
-
-FROM test AS test-cov
-CMD [ "npm", "run", "test:cov"]
-
-FROM test AS test-watch
-ENV GIT_WORK_TREE=/app GIT_DIR=/app/.git
-RUN apk add git
-CMD [ "npm", "run", "test:watch"]
-
-
-
-FROM base as prod
-ENV NODE_ENV=prod
-RUN npm install --production
-COPY . .
 RUN npm run build
-CMD ["node", "dist/main.js"]
 
+RUN npm ci --only=production && npm cache clean --force
 
-#COPY prisma ./prisma/
-#RUN npm cache clean --force
+# PRODUCTION
+FROM base as production
+
+ENV NODE_ENV PRODUCTION 
+
+COPY  --from=build /app/node_modules ./node_modules
+COPY  --from=build /app/dist ./dist
+
+CMD [ "node", "dist/main.js" ]

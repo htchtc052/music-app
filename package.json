@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-    "@nestjs/cli": "^10.1.10",
-    "global": "^4.4.0"
-  },
-  "devDependencies": {
-    "prisma": "^5.0.0"
-  }
-}

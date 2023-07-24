@@ -1,6 +1,0 @@
-services:
-  nest-api:
-    build:
-      target: test-cov
-    volumes:
-      - ./coverage:/app/coverage
