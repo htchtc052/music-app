@@ -1,6 +1,7 @@
 FROM node:18.4-alpine AS base
 WORKDIR /app
 COPY package*.json ./
+COPY prisma ./prisma/
 
 FROM base as dev
 ENV NODE_ENV=dev

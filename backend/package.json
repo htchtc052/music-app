@@ -22,12 +22,14 @@
     "docker-compose:test": "docker-compose -f docker-compose.yml -f test.yml up --build --exit-code-from nest-api",
     "docker-compose:test:cov": "docker-compose -f docker-compose.yml -f test-cov.yml up --build --exit-code-from nest-api",
     "docker-compose:test:watch": "docker-compose -f docker-compose.yml -f test-watch.yml up --build",
-    "docker-compose:prod": "docker-compose -f docker-compose.yml -f production.yml  up --build"
+    "docker-compose:prod": "docker-compose -f docker-compose.yml -f production.yml  up --build",
+    "docker-compose:down": "docker-compose down"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
+    "@prisma/client": "^5.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1"
   },
