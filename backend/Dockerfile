@@ -25,7 +25,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-ENV NODE_ENV PRODUCTION 
+ENV NODE_ENV PRODUCTION
 
 COPY --from=dev /app/node_modules ./node_modules
 
@@ -38,7 +38,7 @@ RUN npm ci --only=production && npm cache clean --force
 # PRODUCTION
 FROM base as production
 
-ENV NODE_ENV PRODUCTION 
+ENV NODE_ENV PRODUCTION
 
 COPY  --from=build /app/node_modules ./node_modules
 COPY  --from=build /app/dist ./dist

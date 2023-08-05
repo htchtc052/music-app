@@ -1,0 +1,13 @@
+{
+  "USERNAME_NOT_EMPTY": "Имя пользователя должно быть задано",
+  "EMAIL_NOT_EMPTY": "Email должен быть задан",
+  "EMAIL_INVALID": "Email имеет неверный формат",
+  "EMAIL_BUSY": "Email занят",
+  "SLUG_NOT_EMPTY": "Имя для ссылки должно быть задано",
+  "SLUG_INVALID": "Имя для ссылки имеет неверный формат",
+  "SLUG_BUSY": "Имя для ссылки занято",
+  "PASSWORD_NOT_EMPTY": "Пароль должен быть задан",
+  "PASSWORD_MIN": "Пароль должен быть не короче {constraints.0} символов",
+  "PASSWORD_CONFIRM_NOT_EMPTY": "Подтверждение пароля должно быть задано",
+  "PASSWORD_CONFIRM_NOT_MATCH": "Пароль и подтверждение пароля не совпадает"
+}

@@ -17,25 +17,24 @@ enum Genders {
 }
 
 model User {
-  id              Int       @id @default(autoincrement())
-  username        String
-  slug            String    @unique
-  email           String    @unique
-  password        String
-  firstname       String?
-  lastname        String?
-  birthday        DateTime?
-  gender          Genders   @default(NOT_SPECIFIED)
-  activationToken String?
-  activatedAt     DateTime?
-  private         Boolean   @default(false)
-  isAdmin         Boolean   @default(false)
-  tokens          Token[]
-  deletedAt       DateTime?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id                Int       @id @default(autoincrement())
+  username          String
+  email             String    @unique
+  password          String
+  firstname         String?
+  lastname          String?
+  birthday          DateTime?
+  gender            Genders   @default(NOT_SPECIFIED)
+  activationToken   String?
+  activatedAt       DateTime?
+  private           Boolean   @default(false)
+  isAdmin           Boolean   @default(false)
+  tokens            Token[]
+  deletedAt         DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  hiddenDescription String?
 
-  // hiddenDescription String?
   @@map(name: "users")
 }
 
