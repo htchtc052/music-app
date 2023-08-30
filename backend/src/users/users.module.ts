@@ -14,7 +14,6 @@ import { EmailService } from '../email/email.service';
 import { EmailModule } from '../email/email.module';
 import { ConfigModule } from '@nestjs/config';
 import { ReadUserProfilePolicyProvider } from './policies/readUserProfile.provider';
-import { ReadUserProfilePolicyHandler } from './policies/readUserProfile.policy';
 
 @Module({
   imports: [ConfigModule, EmailModule, PrismaModule, JwtModule.register({})],
@@ -26,13 +25,8 @@ import { ReadUserProfilePolicyHandler } from './policies/readUserProfile.policy'
     JwtService,
     PrismaService,
     ReadUserProfilePolicyProvider,
-    ReadUserProfilePolicyHandler,
   ],
-  exports: [
-    UsersService,
-    ReadUserProfilePolicyHandler,
-    ReadUserProfilePolicyProvider,
-  ],
+  exports: [UsersService, ReadUserProfilePolicyProvider],
 })
 export class UsersModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
