@@ -33,7 +33,7 @@ export class PoliciesGuard implements CanActivate {
 
     return policiesHandlersRef.every((handlerRef) => {
       const policyHandler = new handlerRef();
-
+      console.log(`policyHandler` + policyHandler);
       return policyHandler.handle(ability);
     });
   }
