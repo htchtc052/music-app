@@ -7,7 +7,7 @@ export const ReadUserProfilePolicyProvider: Provider = {
   provide: ReadUserProfilePolicyHandler,
   inject: [REQUEST],
   useFactory: (request: RequestWithUserProfile) => {
-    console.log(111);
-    return new ReadUserProfilePolicyHandler(request.userProfile);
+    const userProfile = request.userProfile;
+    return () => new ReadUserProfilePolicyHandler(userProfile);
   },
 };
