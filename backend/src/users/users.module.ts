@@ -13,6 +13,8 @@ import { UsersController } from './users.controller';
 import { EmailService } from '../email/email.service';
 import { EmailModule } from '../email/email.module';
 import { ConfigModule } from '@nestjs/config';
+import { ReadUserProfilePolicyProvider } from './policies/readUserProfile.provider';
+import { ReadUserProfilePolicyHandler } from './policies/readUserProfile.policy';
 
 @Module({
   imports: [ConfigModule, EmailModule, PrismaModule, JwtModule.register({})],
@@ -23,16 +25,22 @@ import { ConfigModule } from '@nestjs/config';
     IsFieldAllreadyExists,
     JwtService,
     PrismaService,
+    ReadUserProfilePolicyProvider,
+    ReadUserProfilePolicyHandler,
   ],
-  exports: [UsersService],
+  exports: [
+    UsersService,
+    ReadUserProfilePolicyHandler,
+    ReadUserProfilePolicyProvider,
+  ],
 })
 export class UsersModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(GetUserProfileMiddleware)
       .forRoutes(
-        { path: 'user-profile/:slug', method: RequestMethod.GET },
-        { path: 'user-profile/:slug', method: RequestMethod.PUT },
+        { path: 'users/:id', method: RequestMethod.GET },
+        { path: 'users/:id', method: RequestMethod.PUT },
       );
   }
 }

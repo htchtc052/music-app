@@ -9,7 +9,7 @@ export class GetUserProfileMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: NextFunction) {
     const id = parseInt(req.params.id);
     if (!id) {
-      throw new NotFoundException(`Missing slug`);
+      throw new NotFoundException(`Missing user id`);
     }
     const userProfile = await this.usersService.findById(id);
 
@@ -20,7 +20,6 @@ export class GetUserProfileMiddleware implements NestMiddleware {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     req.userProfile = userProfile;
-    //req.isOwner = user.id === article.userId;
     next();
   }
 }

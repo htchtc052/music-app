@@ -6,7 +6,6 @@ import { useContainer } from 'class-validator';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
 
   const config = new DocumentBuilder().setTitle('MyMusic App API').build();
 
@@ -21,7 +20,7 @@ async function bootstrap() {
   app.useGlobalFilters(
     new I18nValidationExceptionFilter({
       errorFormatter: (errors) => {
-        //console.debug(errors)
+        //console.debug(errors);
         const errorMessages = [];
         errors.forEach((error) => {
           const errorObj = {
@@ -35,6 +34,8 @@ async function bootstrap() {
       },
     }),
   );
+
+  await app.listen(3000);
 }
 
 bootstrap();

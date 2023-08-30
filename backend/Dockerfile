@@ -6,11 +6,11 @@ FROM base as dev
 
 WORKDIR /app
 
-ENV NODE_ENV=dev
+ENV NODE_ENV=development
 
 COPY  package*.json ./
 
-RUN npm ci
+RUN npm install --legacy-peer-deps
 
 COPY  . .
 
@@ -25,7 +25,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-ENV NODE_ENV PRODUCTION
+ENV NODE_ENV=PRODUCTION
 
 COPY --from=dev /app/node_modules ./node_modules
 

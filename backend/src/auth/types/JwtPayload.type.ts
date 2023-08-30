@@ -3,16 +3,8 @@ export type JwtParams = {
   iat: number;
 };
 
-export type JwtAccessTokenPayload = {
-  userId: number;
-  username: string;
-  email: string;
+export type JwtTokenPayload = {
+  sub: number;
 };
 
-export type JwtAccessTokenDecoded = JwtAccessTokenPayload & JwtParams;
-
-export type JwtRefreshTokenPayload = {
-  userId: number;
-};
-
-export type JwtRefreshTokenDecoded = JwtRefreshTokenPayload & JwtParams;
+export type JwtTokenDecoded = JwtTokenPayload & JwtParams;

@@ -24,7 +24,7 @@ export class UsersService {
     const hashedPassword = await argon2.hash(createUserInput.password);
     createUserInput.password = hashedPassword;
 
-    let user;
+    let user: User;
     if (createUserOptions.createActivated) {
       user = await this.prisma.user.create({
         data: { password: hashedPassword, ...createUserInput },
