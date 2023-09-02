@@ -1,13 +1,14 @@
 import { Provider } from '@nestjs/common';
 import { ReadUserProfileHandler } from './readUserProfile.handler';
 import { REQUEST } from '@nestjs/core';
-import RequestWithUserProfile from '../../users/types/requestWithUserProfile';
+import { User } from '@prisma/client';
+import RequestWithUserProfileInterface from '../../users/requestWithUserProfile.interface';
 
 export const ReadUserProfileProvider: Provider = {
   provide: ReadUserProfileHandler,
   inject: [REQUEST],
-  useFactory: (request: RequestWithUserProfile) => {
-    const userProfile = request.userProfile;
-    return () => new ReadUserProfileHandler(userProfile);
+  useFactory: (request: RequestWithUserProfileInterface) => {
+    const userProfile: User = request.userProfile;
+    return new ReadUserProfileHandler(userProfile);
   },
 };

@@ -7,10 +7,8 @@ export class ReadUserProfileHandler implements IPolicyHandler {
   constructor(private userProfile: User) {}
 
   handle(ability: AppAbility) {
-    console.debug(this.userProfile);
-    console.debug(ability.can(Action.Read, subject('User', this.userProfile)));
-    //return ability.can(Action.Read, subject('User', this.userProfile));
-
-    return true;
+    //console.debug(this.userProfile);
+    //console.debug(ability.can(Action.Read, subject('User', this.userProfile)));
+    return ability.can(Action.Read, subject('User', this.userProfile));
   }
 }

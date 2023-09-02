@@ -7,8 +7,7 @@ export enum Action {
   Create = 'create',
   Read = 'read',
   ReadPrivateFields = 'read-private-fields',
-  Update = 'update',
-  Delete = 'delete',
+  Edit = 'update',
 }
 
 type AppSubjects =
@@ -38,7 +37,7 @@ export class AbilityFactory {
           id: user.id,
         });
 
-        builder.can(Action.Update, 'User', { id: user.id });
+        builder.can(Action.Edit, 'User', { id: user.id });
       }
     }
 

@@ -3,7 +3,7 @@ import { IsEmail, IsNotEmpty, Validate } from 'class-validator';
 import { MinLengthCustom } from '../../common/minLengthCustom.decorator';
 import { i18nValidationMessage } from 'nestjs-i18n';
 import { Match } from '../../common/match.decorator';
-import { IsFieldAllreadyExists } from '../../users/validators/isFieldAllreadyExists.validator';
+import { IsFieldAllreadyExists } from '../../users/isFieldAllreadyExists.validator';
 
 export class RegisterDto {
   @ApiProperty({

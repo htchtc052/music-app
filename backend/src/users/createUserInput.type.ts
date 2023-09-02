@@ -1,5 +1,5 @@
 import { OmitType } from '@nestjs/swagger';
-import { RegisterDto } from '../../auth/dtos/register.dto';
+import { RegisterDto } from '../auth/dtos/register.dto';
 
 export class CreateUserInput extends OmitType(RegisterDto, [
   'passwordConfirm',

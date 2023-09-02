@@ -7,14 +7,15 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UserEntity } from './dtos/user.entity';
-import RequestWithUserProfile from './types/requestWithUserProfile';
+
 import { User } from '@prisma/client';
-import { Public } from 'src/auth/decorators/public.decorator';
 import { PoliciesGuard } from '../casl/policies.guard';
 import { CheckPolicies } from '../casl/policies.decorator';
-import { JwtAuthGuard } from '../auth/guards/jwtAuthGuard';
 import { ReadUserProfileHandler } from '../casl/policies/readUserProfile.handler';
+import { JwtAuthGuard } from '../auth/jwtAuthGuard';
+import { Public } from '../auth/public.decorator';
+import { UserEntity } from './user.entity';
+import RequestWithUserProfile from './requestWithUserProfile.interface';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard)

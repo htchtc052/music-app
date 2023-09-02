@@ -8,10 +8,11 @@ import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
-import { UsersService } from '../../users/users.service';
+import { UsersService } from '../users/users.service';
 import { User } from '@prisma/client';
-import { JwtTokenDecoded } from '../types/JwtPayload.type';
-import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
+import { JwtTokenDecoded } from './JwtPayload.type';
+import { IS_PUBLIC_KEY } from './public.decorator';
+import RequestWithAuthUser from '../users/requestWithAuthUser.interface';
 
 @Injectable()
 export class JwtAuthGuard {
@@ -23,7 +24,7 @@ export class JwtAuthGuard {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<RequestWithAuthUser>();
     const token = this.extractTokenFromHeader(request);
 
     const isPublic: boolean = this.reflector.get<boolean>(
@@ -48,8 +49,8 @@ export class JwtAuthGuard {
       // Case 3: The client has a valid token
       user = await this.usersService.findById(+payload.sub);
     }
-    request['user'] = user;
-    if (!request['user'] && !isPublic) {
+    request.authUser = user;
+    if (!request.authUser && !isPublic) {
       throw new ForbiddenException('Auth required');
     }
     return true;

@@ -5,7 +5,7 @@ import {
   Scope,
   Type,
 } from '@nestjs/common';
-import { AbilityFactory } from './ability.factory';
+import { AbilityFactory, AppAbility } from './ability.factory';
 import { ContextIdFactory, ModuleRef, Reflector } from '@nestjs/core';
 import { IPolicyHandler } from './policies-handler.interface';
 import { CHECK_POLICIES_KEY } from './policies.decorator';
@@ -52,9 +52,10 @@ export class PoliciesGuard implements CanActivate {
 
     const request = ctx.switchToHttp().getRequest<Request>();
 
-    const ability = this.abilityFactory.createForUser(request['user']);
+    const ability: AppAbility = this.abilityFactory.createForUser(
+      request['authUser'],
+    );
 
-    console.debug(policyHandlers[0]);
     return policyHandlers.every((handler) => handler.handle(ability));
   }
 }

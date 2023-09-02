@@ -11,14 +11,14 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import * as argon2 from 'argon2';
 import { v4 as uuidv4 } from 'uuid';
-import { JwtTokenDecoded } from './types/JwtPayload.type';
 import { Token, User } from '@prisma/client';
-import { TokensResponse } from './dtos/tokens.response';
-import { AuthResponse } from './dtos/auth.response';
-import { UserEntity } from '../users/dtos/user.entity';
 import { LoginDto } from './dtos/login.dto';
-import { CreateUserInput } from '../users/dtos/createUserInput.type';
 import { RegisterDto } from './dtos/register.dto';
+import { AuthResponse } from './responses/auth.response';
+import { CreateUserInput } from '../users/createUserInput.type';
+import { UserEntity } from '../users/user.entity';
+import { TokensResponse } from './responses/tokens.response';
+import { JwtTokenDecoded } from './JwtPayload.type';
 
 @Injectable()
 export class AuthService {

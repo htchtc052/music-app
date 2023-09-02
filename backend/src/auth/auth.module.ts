@@ -7,16 +7,9 @@ import { UsersModule } from '../users/users.module';
 import { UsersService } from '../users/users.service';
 import { EmailService } from '../email/email.service';
 import { ConfigModule } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [
-    PrismaModule,
-    UsersModule,
-    EmailModule,
-    ConfigModule,
-    JwtModule.register({}),
-  ],
+  imports: [PrismaModule, UsersModule, EmailModule, ConfigModule],
   controllers: [AuthController],
 
   providers: [AuthService, UsersService, EmailService],

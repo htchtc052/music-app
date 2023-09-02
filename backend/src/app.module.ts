@@ -5,6 +5,8 @@ import { LangModule } from './lang.module';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { CaslModule } from './casl/casl.module';
+import { AccountModule } from './account/account.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -33,9 +35,11 @@ import { CaslModule } from './casl/casl.module';
         abortEarly: false,
       },
     }),
+    JwtModule.register({ global: true }),
     LangModule,
     UsersModule,
     AuthModule,
+    AccountModule,
     CaslModule,
   ],
   controllers: [],

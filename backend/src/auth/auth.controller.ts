@@ -2,7 +2,6 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
-  Get,
   Post,
   Req,
   Request,
@@ -12,13 +11,11 @@ import {
 import { AuthService } from './auth.service';
 import { ApiOperation } from '@nestjs/swagger';
 import { RegisterDto } from './dtos/register.dto';
-import { AuthResponse } from './dtos/auth.response';
+import { AuthResponse } from './responses/auth.response';
 import { LoginDto } from './dtos/login.dto';
-import { plainToClass } from 'class-transformer';
-import { UserEntity } from '../users/dtos/user.entity';
-import { TokensResponse } from './dtos/tokens.response';
-import { Public } from './decorators/public.decorator';
-import { JwtAuthGuard } from './guards/jwtAuthGuard';
+import { TokensResponse } from './responses/tokens.response';
+import { Public } from './public.decorator';
+import { JwtAuthGuard } from './jwtAuthGuard';
 
 @Controller('auth')
 @UseGuards(JwtAuthGuard)
@@ -50,17 +47,5 @@ export class AuthController {
     const tokenId: string = req.body['tokenId'];
 
     return this.authService.refreshTokens(tokenId, refreshToken);
-  }
-
-  @ApiOperation({ summary: 'Get user data' })
-  //@UseGuards(JwtAuthGuard)
-  @Get('me')
-  getUser(@Request() req) {
-    const user = req.user;
-
-    return plainToClass(UserEntity, user, {
-      excludeExtraneousValues: true,
-      groups: ['isOwner'],
-    });
   }
 }

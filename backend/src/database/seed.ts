@@ -31,22 +31,21 @@ export const seed = async (): Promise<void> => {
       hiddenDescription: 'Koshka hidden description',
     },
   });
-  /*
-      await prisma.user.upsert({
-        where: { email: 'user.private@gmail.com' },
-        update: {},
-        create: {
-          email: 'user.private@gmail.com',
-          username: 'User private',
-          slug: 'user_private',
-          firstname: 'Ivan',
-          lastname: 'Petrenko',
-          password: hashedPassword,
-          private: true,
-          birthday: new Date(),
-        },
-      });
-    */
+
+  await prisma.user.upsert({
+    where: { email: 'ruslanka@gmail.com' },
+    update: {},
+    create: {
+      email: 'ruslanka@gmail.com',
+      username: 'Ruslanka (hidden)',
+      firstname: 'Ruslanka',
+      lastname: 'Lebedeva',
+      password: hashedPassword,
+      private: true,
+      birthday: new Date(),
+    },
+  });
+
   console.log('Database seeded');
   process.exit(0);
 };

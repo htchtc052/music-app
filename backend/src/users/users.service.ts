@@ -1,14 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import {
-  CreateUserInput,
-  CreateUserOptions,
-} from './dtos/createUserInput.type';
+import { CreateUserInput, CreateUserOptions } from './createUserInput.type';
 
 import { v4 as uuid } from 'uuid';
 import * as argon2 from 'argon2';
 import { User } from '@prisma/client';
 import { EmailService } from '../email/email.service';
+import { EditUserInfoDto } from '../account/editUserInfo.dto';
 
 @Injectable()
 export class UsersService {
@@ -38,6 +36,10 @@ export class UsersService {
       await this.emailService.sendActivationEmail(user);
     }
 
+    return user;
+  }
+
+  async editInfo(user: User, editUserInfoDto: EditUserInfoDto): Promise<User> {
     return user;
   }
 

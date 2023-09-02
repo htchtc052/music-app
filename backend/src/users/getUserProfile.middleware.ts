@@ -1,6 +1,7 @@
 import { Injectable, NestMiddleware, NotFoundException } from '@nestjs/common';
-import { UsersService } from '../users.service';
+
 import { NextFunction, Request, Response } from 'express';
+import { UsersService } from './users.service';
 
 @Injectable()
 export class GetUserProfileMiddleware implements NestMiddleware {
@@ -17,9 +18,7 @@ export class GetUserProfileMiddleware implements NestMiddleware {
       throw new NotFoundException(`User profile not found by id=${id}`);
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    req.userProfile = userProfile;
+    req['userProfile'] = userProfile;
     next();
   }
 }
