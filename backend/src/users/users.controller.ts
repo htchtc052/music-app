@@ -13,8 +13,8 @@ import { User } from '@prisma/client';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { PoliciesGuard } from '../casl/policies.guard';
 import { CheckPolicies } from '../casl/policies.decorator';
-import { ReadUserProfilePolicyHandler } from './policies/readUserProfile.policy';
 import { JwtAuthGuard } from '../auth/guards/jwtAuthGuard';
+import { ReadUserProfileHandler } from '../casl/policies/readUserProfile.handler';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard)
@@ -25,7 +25,7 @@ export class UsersController {
   @Get(':id')
   @UseGuards(PoliciesGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  @CheckPolicies(ReadUserProfilePolicyHandler)
+  @CheckPolicies(ReadUserProfileHandler)
   async getUserById(
     @Req() request: RequestWithUserProfile,
   ): Promise<UserEntity> {

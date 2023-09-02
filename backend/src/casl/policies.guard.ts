@@ -1,40 +1,60 @@
-import { IPolicyHandler } from './policies-handler.interface';
-import { AbilityFactory } from './ability.factory';
 import {
   CanActivate,
   ExecutionContext,
   Injectable,
+  Scope,
   Type,
 } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+import { AbilityFactory } from './ability.factory';
+import { ContextIdFactory, ModuleRef, Reflector } from '@nestjs/core';
+import { IPolicyHandler } from './policies-handler.interface';
 import { CHECK_POLICIES_KEY } from './policies.decorator';
 
 @Injectable()
 export class PoliciesGuard implements CanActivate {
   constructor(
+    private abilityFactory: AbilityFactory,
     private reflector: Reflector,
-    private AbilityFactory: AbilityFactory,
+    private moduleRef: ModuleRef,
   ) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
+  async canActivate(ctx: ExecutionContext) {
     const policiesHandlersRef =
       this.reflector.get<Type<IPolicyHandler>[]>(
         CHECK_POLICIES_KEY,
-        context.getHandler(),
+        ctx.getHandler(),
       ) || [];
 
     if (policiesHandlersRef.length === 0) return true;
 
-    const request = context.switchToHttp().getRequest();
+    const contextId = ContextIdFactory.create();
+    this.moduleRef.registerRequestByContextId(
+      ctx.switchToHttp().getRequest(),
+      contextId,
+    );
 
-    const { user } = request;
+    const policyHandlers: IPolicyHandler[] = [];
+    for (let i = 0; i < policiesHandlersRef.length; i++) {
+      const policyHandlerRef = policiesHandlersRef[i];
+      const policyScope = this.moduleRef.introspect(policyHandlerRef).scope;
+      let policyHandler: IPolicyHandler;
+      if (policyScope === Scope.DEFAULT) {
+        policyHandler = this.moduleRef.get(policyHandlerRef, { strict: false });
+      } else {
+        policyHandler = await this.moduleRef.resolve(
+          policyHandlerRef,
+          contextId,
+          { strict: false },
+        );
+      }
+      policyHandlers.push(policyHandler);
+    }
 
-    const ability = this.AbilityFactory.createForUser(request.user);
+    const request = ctx.switchToHttp().getRequest<Request>();
 
-    return policiesHandlersRef.every((handlerRef) => {
-      const policyHandler = new handlerRef();
-      console.log(`policyHandler` + policyHandler);
-      return policyHandler.handle(ability);
-    });
+    const ability = this.abilityFactory.createForUser(request['user']);
+
+    console.debug(policyHandlers[0]);
+    return policyHandlers.every((handler) => handler.handle(ability));
   }
 }

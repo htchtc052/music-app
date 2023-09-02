@@ -1,4 +1,4 @@
-FROM node:20.4-alpine AS base
+FROM node:20.5 AS base
 
 # build for dev
 

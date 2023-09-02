@@ -3,7 +3,7 @@ import { Action, AppAbility } from '../../casl/ability.factory';
 import { User } from '@prisma/client';
 import { subject } from '@casl/ability';
 
-export class ReadUserProfilePolicyHandler implements IPolicyHandler {
+export class ReadUserProfileHandler implements IPolicyHandler {
   constructor(private userProfile: User) {}
 
   handle(ability: AppAbility) {

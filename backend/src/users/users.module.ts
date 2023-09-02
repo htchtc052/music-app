@@ -13,7 +13,6 @@ import { UsersController } from './users.controller';
 import { EmailService } from '../email/email.service';
 import { EmailModule } from '../email/email.module';
 import { ConfigModule } from '@nestjs/config';
-import { ReadUserProfilePolicyProvider } from './policies/readUserProfile.provider';
 
 @Module({
   imports: [ConfigModule, EmailModule, PrismaModule, JwtModule.register({})],
@@ -24,9 +23,8 @@ import { ReadUserProfilePolicyProvider } from './policies/readUserProfile.provid
     IsFieldAllreadyExists,
     JwtService,
     PrismaService,
-    ReadUserProfilePolicyProvider,
   ],
-  exports: [UsersService, ReadUserProfilePolicyProvider],
+  exports: [UsersService],
 })
 export class UsersModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
