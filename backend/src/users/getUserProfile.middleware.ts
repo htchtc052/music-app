@@ -1,13 +1,14 @@
 import { Injectable, NestMiddleware, NotFoundException } from '@nestjs/common';
 
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { UsersService } from './users.service';
+import RequestWithUserProfile from './requestWithUserProfile.interface';
 
 @Injectable()
 export class GetUserProfileMiddleware implements NestMiddleware {
   constructor(private readonly usersService: UsersService) {}
 
-  async use(req: Request, res: Response, next: NextFunction) {
+  async use(req: RequestWithUserProfile, res: Response, next: NextFunction) {
     const id = parseInt(req.params.id);
     if (!id) {
       throw new NotFoundException(`Missing user id`);

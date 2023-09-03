@@ -32,6 +32,10 @@ export class JwtAuthGuard {
       context.getHandler(),
     );
 
+    if (!token && !isPublic) {
+      throw new ForbiddenException('Auth required');
+    }
+
     let user: User;
 
     if (token) {
@@ -41,7 +45,6 @@ export class JwtAuthGuard {
           secret: this.configService.get<string>('JWT_SECRET'),
         });
       } catch (err) {
-        console.error(err.stack);
         // Case 2: The client has a token, but it is not valid
         throw new UnauthorizedException('Invalid token');
       }
@@ -50,9 +53,7 @@ export class JwtAuthGuard {
       user = await this.usersService.findById(+payload.sub);
     }
     request.authUser = user;
-    if (!request.authUser && !isPublic) {
-      throw new ForbiddenException('Auth required');
-    }
+
     return true;
   }
 
