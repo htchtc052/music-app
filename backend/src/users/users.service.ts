@@ -39,8 +39,11 @@ export class UsersService {
     return user;
   }
 
-  async editInfo(user: User, editUserInfoDto: EditUserInfoDto): Promise<User> {
-    return user;
+  editInfo(user: User, editUserInfoDto: EditUserInfoDto): Promise<User> {
+    return this.prisma.user.update({
+      where: { id: user.id },
+      data: editUserInfoDto,
+    });
   }
 
   findById(id: number): Promise<User> {
