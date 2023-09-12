@@ -1,13 +1,14 @@
 import { Global, Module } from '@nestjs/common';
 import { AbilityFactory } from './ability.factory';
 import { UsersModule } from '../users/users.module';
-import { ReadUserProfileHandler } from './policies/readUserProfile.handler';
-import { ReadUserProfileProvider } from './policies/readUserProfile.provider';
+import { ReadTrackHandler } from './policies/readTrack.handler';
+import { ReadTrackProvider } from './policies/readTrack.provider';
+import { TracksModule } from '../tracks/tracks.module';
 
 @Global()
 @Module({
-  imports: [UsersModule],
-  providers: [AbilityFactory, ReadUserProfileProvider],
-  exports: [AbilityFactory, ReadUserProfileHandler],
+  imports: [UsersModule, TracksModule],
+  providers: [AbilityFactory, ReadTrackProvider],
+  exports: [AbilityFactory, ReadTrackHandler],
 })
 export class CaslModule {}

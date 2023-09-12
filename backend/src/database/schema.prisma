@@ -30,12 +30,46 @@ model User {
   private           Boolean   @default(false)
   isAdmin           Boolean   @default(false)
   tokens            Token[]
+  tracks            Track[]
   deletedAt         DateTime?
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
   hiddenDescription String?
 
   @@map(name: "users")
+}
+
+model Track {
+  id                Int         @id @default(autoincrement())
+  title             String
+  isAdult           Boolean     @default(false)
+  private           Boolean     @default(false)
+  keywords          String[]
+  description       String?
+  hiddenDescription String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  deletedAt         DateTime?
+  userId            Int
+  User              User        @relation(fields: [userId], references: [id])
+  files             TrackFile[]
+
+  @@map(name: "tracks")
+}
+
+model TrackFile {
+  id       Int     @id @default(autoincrement())
+  fileName String
+  bitrate  Int     @default(0)
+  fileSize Int     @default(0)
+  duration Int     @default(0)
+  mime     String
+  md5      String
+  trackId  Int
+  track    Track   @relation(fields: [trackId], references: [id])
+  isActive Boolean @default(false)
+
+  @@map(name: "tracks_files")
 }
 
 model Token {

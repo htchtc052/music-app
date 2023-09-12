@@ -1,38 +1,29 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from './users.service';
-import { PrismaModule, PrismaService } from 'nestjs-prisma';
 import { UsersController } from './users.controller';
 import { EmailService } from '../email/email.service';
 import { EmailModule } from '../email/email.module';
 import { ConfigModule } from '@nestjs/config';
-import { IsFieldAllreadyExists } from './isFieldAllreadyExists.validator';
-import { GetUserProfileMiddleware } from './getUserProfile.middleware';
+import { IsFieldAllreadyExists } from './validators/isFieldAllreadyExists.validator';
+import { GetUserProfileMiddleware } from './middlewares/getUserProfile.middleware';
+import { TracksModule } from '../tracks/tracks.module';
+import { TracksService } from '../tracks/tracks.service';
 
 @Module({
-  imports: [ConfigModule, EmailModule, PrismaModule],
+  imports: [ConfigModule, EmailModule, TracksModule],
   controllers: [UsersController],
   providers: [
     UsersService,
     EmailService,
     IsFieldAllreadyExists,
     JwtService,
-    PrismaService,
+    TracksService,
   ],
   exports: [UsersService],
 })
 export class UsersModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(GetUserProfileMiddleware)
-      .forRoutes(
-        { path: 'users/:id', method: RequestMethod.GET },
-        { path: 'users/:id', method: RequestMethod.PUT },
-      );
+    consumer.apply(GetUserProfileMiddleware).forRoutes(UsersController);
   }
 }

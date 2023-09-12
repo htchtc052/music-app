@@ -1,8 +1,8 @@
 import { Injectable, NestMiddleware, NotFoundException } from '@nestjs/common';
 
 import { NextFunction, Response } from 'express';
-import { UsersService } from './users.service';
-import RequestWithUserProfile from './requestWithUserProfile.interface';
+import { UsersService } from '../users.service';
+import { RequestWithUserProfile } from '../types/requestsWithUsers.type';
 
 @Injectable()
 export class GetUserProfileMiddleware implements NestMiddleware {
@@ -19,7 +19,8 @@ export class GetUserProfileMiddleware implements NestMiddleware {
       throw new NotFoundException(`User profile not found by id=${id}`);
     }
 
-    req['userProfile'] = userProfile;
+    req.userProfile = userProfile;
+
     next();
   }
 }

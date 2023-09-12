@@ -15,10 +15,10 @@ import { Token, User } from '@prisma/client';
 import { LoginDto } from './dtos/login.dto';
 import { RegisterDto } from './dtos/register.dto';
 import { AuthResponse } from './responses/auth.response';
-import { CreateUserInput } from '../users/createUserInput.type';
-import { UserEntity } from '../users/user.entity';
+import { CreateUserInput } from '../users/types/createUserInput.type';
+import { UserEntity } from '../users/entities/user.entity';
 import { TokensResponse } from './responses/tokens.response';
-import { JwtTokenDecoded } from './JwtPayload.type';
+import { JwtTokenDecoded } from './types/JwtPayload.type';
 
 @Injectable()
 export class AuthService {

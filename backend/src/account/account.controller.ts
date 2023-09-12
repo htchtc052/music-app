@@ -6,27 +6,22 @@ import {
   Get,
   Put,
   Req,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { EditUserInfoDto } from './editUserInfo.dto';
-import { UserEntity } from '../users/user.entity';
-import RequestWithAuthUser from '../users/requestWithAuthUser.interface';
-import { JwtAuthGuard } from '../auth/jwtAuthGuard';
+import { EditUserInfoDto } from './dtos/editUserInfo.dto';
+import { UserEntity } from '../users/entities/user.entity';
+import { RequestWithAuthUser } from '../users/types/requestsWithUsers.type';
 
 @Controller('account')
-@UseGuards(JwtAuthGuard)
 export class AccountController {
   constructor(private usersService: UsersService) {}
 
   @ApiOperation({ summary: 'Get own user' })
   @Get()
   @UseInterceptors(ClassSerializerInterceptor)
-  getUser(@Req() request: RequestWithAuthUser) {
-    const user = request.authUser;
-
-    return new UserEntity(user);
+  async getUser(@Req() request: RequestWithAuthUser) {
+    return new UserEntity(request.authUser);
   }
 
   @ApiOperation({ summary: 'Get own user' })

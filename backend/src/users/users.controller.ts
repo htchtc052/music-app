@@ -2,38 +2,37 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
-  Req,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { Public } from '../auth/decorators/public.decorator';
+import { UserEntity } from './entities/user.entity';
+import { Track, User } from '@prisma/client';
+import { TracksService } from '../tracks/tracks.service';
+import { AbilityFactory } from '../casl/ability.factory';
+import { UserProfile } from './decorators/userProfile.decorator';
+import { IsOwner } from './decorators/isOwner.decorator';
 
-import { User } from '@prisma/client';
-import { PoliciesGuard } from '../casl/policies.guard';
-import { CheckPolicies } from '../casl/policies.decorator';
-import { ReadUserProfileHandler } from '../casl/policies/readUserProfile.handler';
-import { JwtAuthGuard } from '../auth/jwtAuthGuard';
-import { Public } from '../auth/public.decorator';
-import { UserEntity } from './user.entity';
-import RequestWithUserProfile from './requestWithUserProfile.interface';
-
-@Controller('users')
-@UseGuards(JwtAuthGuard)
+@Controller('users/:id')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private tracksService: TracksService,
+    private readonly abilityFactory: AbilityFactory,
+  ) {}
 
   @Public()
-  @Get(':id')
-  @UseGuards(PoliciesGuard)
+  @Get()
   @UseInterceptors(ClassSerializerInterceptor)
-  @CheckPolicies(ReadUserProfileHandler)
-  async getUserById(
-    @Req() request: RequestWithUserProfile,
-  ): Promise<UserEntity> {
-    const userProfile: User = request.userProfile;
-
-    //console.debug(userProfile);
-
+  async getUserById(@UserProfile() userProfile: User): Promise<UserEntity> {
     return new UserEntity(userProfile);
+  }
+
+  @Public()
+  @Get('tracks')
+  @UseInterceptors(ClassSerializerInterceptor)
+  getUserTracks(
+    @UserProfile() userProfile: User,
+    @IsOwner() isOwner: boolean,
+  ): Promise<Track[]> {
+    return this.tracksService.getTracksByUser(userProfile, isOwner);
   }
 }

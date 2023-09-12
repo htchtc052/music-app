@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { CreateUserInput, CreateUserOptions } from './createUserInput.type';
+import {
+  CreateUserInput,
+  CreateUserOptions,
+} from './types/createUserInput.type';
 
 import { v4 as uuid } from 'uuid';
 import * as argon2 from 'argon2';
 import { User } from '@prisma/client';
 import { EmailService } from '../email/email.service';
-import { EditUserInfoDto } from '../account/editUserInfo.dto';
+import { EditUserInfoDto } from '../account/dtos/editUserInfo.dto';
 
 @Injectable()
 export class UsersService {

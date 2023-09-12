@@ -14,8 +14,8 @@ import { RegisterDto } from './dtos/register.dto';
 import { AuthResponse } from './responses/auth.response';
 import { LoginDto } from './dtos/login.dto';
 import { TokensResponse } from './responses/tokens.response';
-import { Public } from './public.decorator';
-import { JwtAuthGuard } from './jwtAuthGuard';
+import { Public } from './decorators/public.decorator';
+import { JwtAuthGuard } from './guards/jwtAuthGuard';
 
 @Controller('auth')
 @UseGuards(JwtAuthGuard)

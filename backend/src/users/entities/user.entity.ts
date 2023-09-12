@@ -42,10 +42,10 @@ export class UserEntity implements User {
   @Exclude()
   activatedAt: Date;
 
-  @Exclude()
+  @Expose()
   createdAt: Date;
 
-  @Exclude()
+  @Expose()
   updatedAt: Date;
 
   @Exclude()

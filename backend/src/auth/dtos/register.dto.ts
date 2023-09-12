@@ -3,21 +3,16 @@ import { IsEmail, IsNotEmpty, Validate } from 'class-validator';
 import { MinLengthCustom } from '../../common/minLengthCustom.decorator';
 import { i18nValidationMessage } from 'nestjs-i18n';
 import { Match } from '../../common/match.decorator';
-import { IsFieldAllreadyExists } from '../../users/isFieldAllreadyExists.validator';
+import { IsFieldAllreadyExists } from '../../users/validators/isFieldAllreadyExists.validator';
 
 export class RegisterDto {
-  @ApiProperty({
-    name: 'User name',
-    description: 'User name descr',
-  })
+  @ApiProperty({ example: 'john_doe', description: 'User name' })
   @IsNotEmpty({
     message: i18nValidationMessage('validation.USERNAME_NOT_EMPTY'),
   })
   username: string;
 
-  @ApiProperty({
-    description: 'User email',
-  })
+  @ApiProperty({ example: 'user@mail.com', description: 'User email' })
   @IsNotEmpty({ message: i18nValidationMessage('validation.EMAIL_NOT_EMPTY') })
   @IsEmail({}, { message: i18nValidationMessage('validation.EMAIL_INVALID') })
   @Validate(IsFieldAllreadyExists, {
@@ -25,9 +20,7 @@ export class RegisterDto {
   })
   email: string;
 
-  @ApiProperty({
-    description: 'User password',
-  })
+  @ApiProperty({ example: 'Strong_password', description: 'User password' })
   @IsNotEmpty({
     message: i18nValidationMessage('validation.PASSWORD_NOT_EMPTY'),
   })
@@ -36,7 +29,10 @@ export class RegisterDto {
   })
   password: string;
 
-  @ApiProperty({ description: 'Password confirmation' })
+  @ApiProperty({
+    example: 'Strong_password',
+    description: 'User password confirm',
+  })
   @IsNotEmpty({
     message: i18nValidationMessage('validation.PASSWORD_CONFIRM_NOT_EMPTY'),
   })
