@@ -19,9 +19,7 @@ export class TracksModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(GetTrackMiddleware)
-      .forRoutes(
-        { path: 'tracks/:id', method: RequestMethod.GET },
-        { path: 'tracks/:id', method: RequestMethod.PUT },
-      );
+      .exclude({ path: 'tracks', method: RequestMethod.POST })
+      .forRoutes(TracksController);
   }
 }

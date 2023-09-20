@@ -12,6 +12,8 @@ import { UsersService } from '../users/users.service';
 import { EditUserInfoDto } from './dtos/editUserInfo.dto';
 import { UserEntity } from '../users/entities/user.entity';
 import { RequestWithAuthUser } from '../users/types/requestsWithUsers.type';
+import { AuthUser } from '../auth/decorators/authUser.decorator';
+import { User } from '@prisma/client';
 
 @Controller('account')
 export class AccountController {
@@ -20,11 +22,11 @@ export class AccountController {
   @ApiOperation({ summary: 'Get own user' })
   @Get()
   @UseInterceptors(ClassSerializerInterceptor)
-  async getUser(@Req() request: RequestWithAuthUser) {
-    return new UserEntity(request.authUser);
+  async getUser(@AuthUser() authUser: User) {
+    return new UserEntity(authUser);
   }
 
-  @ApiOperation({ summary: 'Get own user' })
+  @ApiOperation({ summary: 'Edit user' })
   @Put('editInfo')
   @UseInterceptors(ClassSerializerInterceptor)
   async editInfo(

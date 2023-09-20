@@ -1,14 +1,42 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { Track, User } from '@prisma/client';
+import { Track, TrackFile, User } from '@prisma/client';
+import { TrackEntity } from './entities/track.entity';
+import { ConfigService } from '@nestjs/config';
+import { EditTrackInfoDto } from './dtos/editTrackInfo.dto';
 
 @Injectable()
 @Injectable()
 export class TracksService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private configService: ConfigService,
+  ) {}
 
-  async createTrack() {
-    return Promise.resolve();
+  async createTrack(
+    uploadedTrackFile: Express.Multer.File,
+    user: User,
+  ): Promise<TrackEntity> {
+    const track: Track = await this.prisma.track.create({
+      data: { title: uploadedTrackFile.filename, userId: user.id },
+    });
+
+    const file: TrackFile = await this.prisma.trackFile.create({
+      data: {
+        fileName: uploadedTrackFile.filename,
+        fileSize: uploadedTrackFile.size,
+        filePath:
+          this.configService.get<string>('BACKEND_URL') +
+          '/' +
+          uploadedTrackFile.path,
+        mimetype: uploadedTrackFile.mimetype,
+        trackId: track.id,
+        isActive: true,
+        md5: '',
+      },
+    });
+
+    return { ...track, files: file };
   }
 
   findById(id: number): Promise<Track> {
@@ -19,8 +47,18 @@ export class TracksService {
     });
   }
 
+  async editInfo(
+    track: Track,
+    editTrackInfoDto: EditTrackInfoDto,
+  ): Promise<void> {
+    await this.prisma.track.update({
+      where: { id: track.id },
+      data: editTrackInfoDto,
+    });
+  }
+
   async findWithFileById(id: number): Promise<Track> {
-    const track = await this.prisma.track.findUnique({
+    const track: Track = await this.prisma.track.findUnique({
       where: {
         id,
       },
@@ -49,7 +87,7 @@ export class TracksService {
       where = { userId: user.id, private: false };
     }
 
-    const tracks = await this.prisma.track.findMany({
+    const tracks: Track[] = await this.prisma.track.findMany({
       where,
       include: {
         files: {

@@ -49,7 +49,6 @@ export const seed = async (): Promise<void> => {
   const track1 = await prisma.track.create({
     data: {
       title: 'Track 1',
-      isAdult: false,
       keywords: ['music', 'track'],
       description: 'This is track 1',
       hiddenDescription: 'This is a hidden description for track 1',
@@ -62,10 +61,10 @@ export const seed = async (): Promise<void> => {
   const file1 = await prisma.trackFile.create({
     data: {
       fileName: 'file1.mp3',
-      bitrate: 320,
+      filePath: 'file1.mp3',
       fileSize: 1024,
       duration: 240,
-      mime: 'audio/mp3',
+      mimetype: 'audio/mp3',
       md5: 'abc123',
       trackId: track1.id,
       isActive: true,
@@ -75,10 +74,10 @@ export const seed = async (): Promise<void> => {
   const fileInactive = await prisma.trackFile.create({
     data: {
       fileName: 'fileInactive.mp3',
-      bitrate: 320,
+      filePath: 'fileInactive.mp3',
       fileSize: 1024,
       duration: 240,
-      mime: 'audio/mp3',
+      mimetype: 'audio/mp3',
       md5: 'abc234',
       trackId: track1.id,
       isActive: false,
@@ -88,7 +87,6 @@ export const seed = async (): Promise<void> => {
   const track2 = await prisma.track.create({
     data: {
       title: 'Track 2',
-      isAdult: false,
       keywords: ['music', 'track'],
       description: 'This is track 2',
       private: true,
@@ -101,10 +99,10 @@ export const seed = async (): Promise<void> => {
   const file2 = await prisma.trackFile.create({
     data: {
       fileName: 'file2.mp3',
-      bitrate: 320,
+      filePath: 'file2.mp3',
       fileSize: 1024,
       duration: 180,
-      mime: 'audio/mp3',
+      mimetype: 'audio/mp3',
       md5: 'def456',
       trackId: track2.id,
       isActive: true,

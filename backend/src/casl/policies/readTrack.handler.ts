@@ -7,8 +7,6 @@ export class ReadTrackHandler implements IPolicyHandler {
   constructor(private track: Track) {}
 
   handle(ability: AppAbility) {
-    //console.debug(this.track);
-    //console.debug(ability.can(Action.Read, subject('Track', this.track)));
     return ability.can(Action.Read, subject('Track', this.track));
   }
 }

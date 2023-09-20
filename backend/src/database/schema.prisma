@@ -42,7 +42,6 @@ model User {
 model Track {
   id                Int         @id @default(autoincrement())
   title             String
-  isAdult           Boolean     @default(false)
   private           Boolean     @default(false)
   keywords          String[]
   description       String?
@@ -59,11 +58,11 @@ model Track {
 
 model TrackFile {
   id       Int     @id @default(autoincrement())
+  filePath String
   fileName String
-  bitrate  Int     @default(0)
   fileSize Int     @default(0)
   duration Int     @default(0)
-  mime     String
+  mimetype String
   md5      String
   trackId  Int
   track    Track   @relation(fields: [trackId], references: [id])

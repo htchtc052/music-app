@@ -11,7 +11,7 @@ export class FileEntity implements TrackFile {
 
   @ApiProperty()
   @Expose()
-  bitrate: number;
+  filePath: string;
 
   @ApiProperty()
   @Expose()
@@ -23,7 +23,7 @@ export class FileEntity implements TrackFile {
 
   @ApiProperty()
   @Expose()
-  mime: string;
+  mimetype: string;
 
   @ApiProperty()
   @Expose()

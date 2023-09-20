@@ -11,10 +11,15 @@ import { PrismaModule } from 'nestjs-prisma';
 import { TracksModule } from './tracks/tracks.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwtAuthGuard';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from 'path';
 
 @Module({
   imports: [
-    //ServeStaticModule.forRoot({rootPath: path.resolve(__dirname, 'static')}),
+    ServeStaticModule.forRoot({
+      rootPath: path.join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads', // Optional: This sets the root URL for serving static files.
+    }),
     ConfigModule.forRoot({
       envFilePath: `.env`,
       isGlobal: true,

@@ -32,9 +32,6 @@ export class TrackEntity implements Track {
   updatedAt: Date;
 
   @ApiProperty()
-  isAdult: boolean;
-
-  @ApiProperty()
   @Expose()
   private: boolean;
 
