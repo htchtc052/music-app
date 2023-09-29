@@ -10,6 +10,7 @@ import { Track, User } from '@prisma/client';
 import { TracksService } from '../tracks/tracks.service';
 import { UserProfile } from './decorators/userProfile.decorator';
 import { IsOwner } from './decorators/isOwner.decorator';
+import { TransformTrackInterceptor } from '../tracks/interceptors/transormTrack.interceptor';
 
 @Controller('users/:id')
 export class UsersController {
@@ -24,11 +25,18 @@ export class UsersController {
 
   @Public()
   @Get('tracks')
-  @UseInterceptors(ClassSerializerInterceptor)
-  getUserTracks(
+  @UseInterceptors(TransformTrackInterceptor)
+  async getUserTracks(
     @UserProfile() userProfile: User,
     @IsOwner() isOwner: boolean,
   ): Promise<Track[]> {
-    return this.tracksService.getTracksByUser(userProfile, isOwner);
+    const tracks: Track[] = await this.tracksService.getTracksByUser(
+      userProfile,
+      isOwner,
+    );
+
+    return tracks;
+
+    //return tracks.map((track: Track) => new TrackEntity(track));
   }
 }

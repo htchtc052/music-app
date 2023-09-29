@@ -24,6 +24,8 @@ import { TracksService } from './tracks.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
 import { EditTrackInfoDto } from './dtos/editTrackInfo.dto';
+import { EditTrackHandler } from '../casl/policies/editTrack.handler';
+import { TransformTrackInterceptor } from './interceptors/transormTrack.interceptor';
 
 @Controller('tracks')
 export class TracksController {
@@ -55,15 +57,20 @@ export class TracksController {
 
   @ApiOperation({ summary: 'Edit track info' })
   @Put(':id/editInfo')
+  @CheckPolicies(EditTrackHandler)
+  @UseGuards(PoliciesGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async editInfo(
     @Body() editTrackInfoDto: EditTrackInfoDto,
     @Req() request: RequestWithTrack,
-  ): Promise<string> {
+  ): Promise<TrackEntity> {
     const track: Track = request.track;
     await this.tracksService.editInfo(track, editTrackInfoDto);
 
-    return 'Track updated successfully';
+    const updatedTrack: Track = await this.tracksService.findWithFileById(
+      track.id,
+    );
+    return new TrackEntity(updatedTrack);
   }
 
   @ApiOperation({ summary: 'Get track by id' })
@@ -71,7 +78,8 @@ export class TracksController {
   @Get(':id')
   @CheckPolicies(ReadTrackHandler)
   @UseGuards(PoliciesGuard)
-  @UseInterceptors(ClassSerializerInterceptor)
+  @UseInterceptors(TransformTrackInterceptor)
+  // @UseInterceptors(ClassSerializerInterceptor)
   getTrack(@Req() request: RequestWithTrack) {
     return new TrackEntity(request.track);
   }

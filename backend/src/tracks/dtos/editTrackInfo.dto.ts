@@ -13,8 +13,15 @@ export class EditTrackInfoDto {
   description?: string;
 
   @ApiProperty({
-    example: 'My awesome hidden song',
-    description: 'Track hidden description',
+    example: 'My awesome  song info',
+    description: 'Track hiddendescription',
   })
   hiddenDescription?: string;
+
+  @ApiProperty({
+    example: true,
+    description: 'Whether the track is private or not',
+    default: false,
+  })
+  private?: boolean;
 }

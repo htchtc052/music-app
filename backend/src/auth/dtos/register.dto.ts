@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, Validate } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, Validate } from 'class-validator';
 import { MinLengthCustom } from '../../common/minLengthCustom.decorator';
 import { i18nValidationMessage } from 'nestjs-i18n';
 import { Match } from '../../common/match.decorator';
@@ -23,6 +23,9 @@ export class RegisterDto {
   @ApiProperty({ example: 'Strong_password', description: 'User password' })
   @IsNotEmpty({
     message: i18nValidationMessage('validation.PASSWORD_NOT_EMPTY'),
+  })
+  @IsString({
+    message: i18nValidationMessage('validation.PASSWORD_IS_STRING'),
   })
   @MinLengthCustom(4, {
     message: i18nValidationMessage('validation.PASSWORD_MIN', { count: 4 }),

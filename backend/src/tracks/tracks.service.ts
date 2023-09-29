@@ -53,7 +53,12 @@ export class TracksService {
   ): Promise<void> {
     await this.prisma.track.update({
       where: { id: track.id },
-      data: editTrackInfoDto,
+      data: {
+        title: editTrackInfoDto.title,
+        description: editTrackInfoDto.description,
+        hiddenDescription: editTrackInfoDto.hiddenDescription,
+        private: editTrackInfoDto.private,
+      },
     });
   }
 
