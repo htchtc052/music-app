@@ -35,7 +35,6 @@ export class TracksController {
   ) {}
 
   @Post()
-  @UseInterceptors(ClassSerializerInterceptor)
   @UseInterceptors(
     FileInterceptor('trackFile', {
       fileFilter: (req, file, cb) => {
@@ -47,11 +46,12 @@ export class TracksController {
       },
     }),
   )
+  @UseInterceptors(ClassSerializerInterceptor)
   createTrack(
     @AuthUser() authUser: User,
     @UploadedFile()
     uploadedFile: Express.Multer.File,
-  ): any {
+  ): Promise<TrackEntity> {
     return this.tracksService.createTrack(uploadedFile, authUser);
   }
 

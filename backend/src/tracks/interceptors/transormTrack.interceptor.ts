@@ -29,26 +29,20 @@ export class TransformTrackInterceptor<T>
 
     return next.handle().pipe(
       map((data) => {
-        // if (data) {
-        //  const isOwner = ability.can(Action.IsOwner, subject('Track', data));
-
-        //   return classToPlain(data, { groups: [isOwner ? 'isOwner' : ''] });
-        // }
-
         //in case there is TrackEntity[]
         if (Array.isArray(data)) {
-          return data.map((track) => {
+          data = data.map((track) => {
             const isOwner = ability.can(
               Action.IsOwner,
               subject('Track', track),
             );
 
-            return classToPlain(data, { groups: [isOwner ? 'isOwner' : ''] });
+            return classToPlain(track, { groups: [isOwner ? 'isOwner' : ''] });
           });
         } else {
           const isOwner = ability.can(Action.IsOwner, subject('Track', data));
 
-          return classToPlain(data, { groups: [isOwner ? 'isOwner' : ''] });
+          data = classToPlain(data, { groups: [isOwner ? 'isOwner' : ''] });
         }
 
         return data;

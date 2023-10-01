@@ -1,7 +1,6 @@
-import { Exclude, Expose, Transform, Type } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { Track } from '@prisma/client';
-import { FileEntity } from '../../files/entities/fileEntity';
+import { Track, TrackFile } from '@prisma/client';
 
 export class TrackEntity implements Track {
   @ApiProperty({ required: true })
@@ -43,9 +42,7 @@ export class TrackEntity implements Track {
 
   @ApiProperty({ name: 'file' })
   @Expose({ name: 'file' })
-  @Transform(({ value }) => ({ ...value[0] }), { toPlainOnly: true })
-  @Type(() => FileEntity)
-  files: FileEntity;
+  file: TrackFile;
 
   constructor(partial?: Partial<TrackEntity>) {
     Object.assign(this, partial);

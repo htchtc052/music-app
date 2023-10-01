@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Track, TrackFile, User } from '@prisma/client';
 import * as argon2 from 'argon2';
 
 const prisma = new PrismaClient();
@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export const seed = async (): Promise<void> => {
   const hashedPassword = await argon2.hash('1230');
 
-  const user1 = await prisma.user.upsert({
+  const user1: User = await prisma.user.upsert({
     where: { email: 'alonecat@gmail.com' },
     update: {},
     create: {
@@ -18,7 +18,7 @@ export const seed = async (): Promise<void> => {
     },
   });
 
-  const user2 = await prisma.user.upsert({
+  const user2: User = await prisma.user.upsert({
     where: { email: 'koshka@gmail.com' },
     update: {},
     create: {
@@ -32,7 +32,7 @@ export const seed = async (): Promise<void> => {
     },
   });
 
-  const user3 = await prisma.user.upsert({
+  const user3: User = await prisma.user.upsert({
     where: { email: 'ruslanka@gmail.com' },
     update: {},
     create: {
@@ -46,7 +46,7 @@ export const seed = async (): Promise<void> => {
     },
   });
 
-  const track1 = await prisma.track.create({
+  const track1: Track = await prisma.track.create({
     data: {
       title: 'Track 1',
       keywords: ['music', 'track'],
@@ -58,54 +58,35 @@ export const seed = async (): Promise<void> => {
     },
   });
 
-  const file1 = await prisma.trackFile.create({
+  const file1: TrackFile = await prisma.trackFile.create({
     data: {
       fileName: 'file1.mp3',
       filePath: 'file1.mp3',
       fileSize: 1024,
-      duration: 240,
       mimetype: 'audio/mp3',
-      md5: 'abc123',
       trackId: track1.id,
-      isActive: true,
     },
   });
 
-  const fileInactive = await prisma.trackFile.create({
+  const track2: Track = await prisma.track.create({
     data: {
-      fileName: 'fileInactive.mp3',
-      filePath: 'fileInactive.mp3',
-      fileSize: 1024,
-      duration: 240,
-      mimetype: 'audio/mp3',
-      md5: 'abc234',
-      trackId: track1.id,
-      isActive: false,
-    },
-  });
-
-  const track2 = await prisma.track.create({
-    data: {
-      title: 'Track 2',
-      keywords: ['music', 'track'],
-      description: 'This is track 2',
+      title: 'Track private 2',
+      keywords: ['track private', 'track'],
       private: true,
+      description: 'This is private track 2',
       createdAt: new Date(),
       updatedAt: new Date(),
-      userId: 2,
+      userId: user1.id,
     },
   });
 
-  const file2 = await prisma.trackFile.create({
+  const file2: TrackFile = await prisma.trackFile.create({
     data: {
       fileName: 'file2.mp3',
       filePath: 'file2.mp3',
-      fileSize: 1024,
-      duration: 180,
+      fileSize: 2048,
       mimetype: 'audio/mp3',
-      md5: 'def456',
       trackId: track2.id,
-      isActive: true,
     },
   });
 

@@ -1,8 +1,10 @@
 import { TrackFile } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
-import { Exclude, Expose } from 'class-transformer';
+import { Expose } from 'class-transformer';
 
 export class FileEntity implements TrackFile {
+  @ApiProperty()
+  @Expose()
   id: number;
 
   @ApiProperty()
@@ -15,10 +17,6 @@ export class FileEntity implements TrackFile {
 
   @ApiProperty()
   @Expose()
-  duration: number;
-
-  @ApiProperty()
-  @Expose()
   fileSize: number;
 
   @ApiProperty()
@@ -27,12 +25,6 @@ export class FileEntity implements TrackFile {
 
   @ApiProperty()
   @Expose()
-  md5: string;
-
-  @Exclude()
-  isActive: boolean;
-
-  @Exclude()
   trackId: number;
 
   constructor(partial?: Partial<FileEntity>) {

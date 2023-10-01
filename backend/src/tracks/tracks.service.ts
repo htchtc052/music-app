@@ -18,7 +18,7 @@ export class TracksService {
     user: User,
   ): Promise<TrackEntity> {
     const track: Track = await this.prisma.track.create({
-      data: { title: uploadedTrackFile.filename, userId: user.id },
+      data: { title: uploadedTrackFile.originalname, userId: user.id },
     });
 
     const file: TrackFile = await this.prisma.trackFile.create({
@@ -31,12 +31,10 @@ export class TracksService {
           uploadedTrackFile.path,
         mimetype: uploadedTrackFile.mimetype,
         trackId: track.id,
-        isActive: true,
-        md5: '',
       },
     });
 
-    return { ...track, files: file };
+    return { ...track, file };
   }
 
   findById(id: number): Promise<Track> {
@@ -68,11 +66,7 @@ export class TracksService {
         id,
       },
       include: {
-        files: {
-          where: {
-            isActive: true,
-          },
-        },
+        file: true,
       },
     });
 
@@ -84,22 +78,18 @@ export class TracksService {
   }
 
   async getTracksByUser(user: User, readAsOwner: boolean): Promise<Track[]> {
-    let where = {};
+    const where: { userId: number; private?: boolean } = {
+      userId: user.id,
+    };
 
-    if (readAsOwner) {
-      where = { userId: user.id };
-    } else {
-      where = { userId: user.id, private: false };
+    if (!readAsOwner) {
+      where.private = false;
     }
 
     const tracks: Track[] = await this.prisma.track.findMany({
       where,
       include: {
-        files: {
-          where: {
-            isActive: true,
-          },
-        },
+        file: true,
       },
     });
 

@@ -40,33 +40,30 @@ model User {
 }
 
 model Track {
-  id                Int         @id @default(autoincrement())
+  id                Int        @id @default(autoincrement())
   title             String
-  private           Boolean     @default(false)
+  private           Boolean    @default(false)
   keywords          String[]
   description       String?
   hiddenDescription String?
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
   deletedAt         DateTime?
   userId            Int
-  User              User        @relation(fields: [userId], references: [id])
-  files             TrackFile[]
+  user              User       @relation(fields: [userId], references: [id])
+  file              TrackFile?
 
   @@map(name: "tracks")
 }
 
 model TrackFile {
-  id       Int     @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
   filePath String
   fileName String
-  fileSize Int     @default(0)
-  duration Int     @default(0)
+  fileSize Int    @default(0)
   mimetype String
-  md5      String
-  trackId  Int
-  track    Track   @relation(fields: [trackId], references: [id])
-  isActive Boolean @default(false)
+  track    Track  @relation(fields: [trackId], references: [id])
+  trackId  Int    @unique
 
   @@map(name: "tracks_files")
 }
