@@ -17,24 +17,22 @@ enum Genders {
 }
 
 model User {
-  id                Int       @id @default(autoincrement())
-  username          String
-  email             String    @unique
-  password          String
-  firstname         String?
-  lastname          String?
-  birthday          DateTime?
-  gender            Genders   @default(NOT_SPECIFIED)
-  activationToken   String?
-  activatedAt       DateTime?
-  private           Boolean   @default(false)
-  isAdmin           Boolean   @default(false)
-  tokens            Token[]
-  tracks            Track[]
-  deletedAt         DateTime?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  hiddenDescription String?
+  id              Int       @id @default(autoincrement())
+  username        String
+  email           String    @unique
+  password        String
+  firstname       String?
+  lastname        String?
+  birthday        DateTime?
+  gender          Genders?  @default(NOT_SPECIFIED)
+  activationToken String?
+  activatedAt     DateTime?
+  isAdmin         Boolean   @default(false)
+  tokens          Token[]
+  tracks          Track[]
+  deletedAt       DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime? @updatedAt
 
   @@map(name: "users")
 }

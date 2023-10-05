@@ -36,7 +36,5 @@ export class UsersController {
     );
 
     return tracks;
-
-    //return tracks.map((track: Track) => new TrackEntity(track));
   }
 }

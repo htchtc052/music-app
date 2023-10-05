@@ -31,11 +31,6 @@ export class UserEntity implements User {
   @Expose()
   birthday: Date;
 
-  private: boolean;
-
-  @Expose({ groups: ['readPrivateFields'] })
-  hiddenDescription: string;
-
   @Exclude()
   activationToken: string;
 

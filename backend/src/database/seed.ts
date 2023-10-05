@@ -28,7 +28,6 @@ export const seed = async (): Promise<void> => {
       lastname: 'Koshkina',
       password: hashedPassword,
       birthday: new Date(),
-      hiddenDescription: 'Koshka hidden description',
     },
   });
 
@@ -41,7 +40,6 @@ export const seed = async (): Promise<void> => {
       firstname: 'Ruslanka',
       lastname: 'Lebedeva',
       password: hashedPassword,
-      private: true,
       birthday: new Date(),
     },
   });

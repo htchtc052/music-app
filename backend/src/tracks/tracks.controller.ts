@@ -4,6 +4,7 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Delete,
   Get,
   Post,
   Put,
@@ -17,7 +18,6 @@ import { TrackEntity } from './entities/track.entity';
 import { PoliciesGuard } from '../casl/policies.guard';
 import { CheckPolicies } from '../casl/policies.decorator';
 import { ReadTrackHandler } from '../casl/policies/readTrack.handler';
-import { Public } from 'src/auth/decorators/public.decorator';
 import { Track, User } from '@prisma/client';
 import { AuthUser } from '../auth/decorators/authUser.decorator';
 import { TracksService } from './tracks.service';
@@ -26,6 +26,7 @@ import { ConfigService } from '@nestjs/config';
 import { EditTrackInfoDto } from './dtos/editTrackInfo.dto';
 import { EditTrackHandler } from '../casl/policies/editTrack.handler';
 import { TransformTrackInterceptor } from './interceptors/transormTrack.interceptor';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('tracks')
 export class TracksController {
@@ -55,6 +56,16 @@ export class TracksController {
     return this.tracksService.createTrack(uploadedFile, authUser);
   }
 
+  @ApiOperation({ summary: 'Get track by id' })
+  @Public()
+  @Get(':id')
+  @CheckPolicies(ReadTrackHandler)
+  @UseGuards(PoliciesGuard)
+  @UseInterceptors(TransformTrackInterceptor)
+  getTrack(@Req() request: RequestWithTrack) {
+    return new TrackEntity(request.track);
+  }
+
   @ApiOperation({ summary: 'Edit track info' })
   @Put(':id/editInfo')
   @CheckPolicies(EditTrackHandler)
@@ -65,22 +76,21 @@ export class TracksController {
     @Req() request: RequestWithTrack,
   ): Promise<TrackEntity> {
     const track: Track = request.track;
-    await this.tracksService.editInfo(track, editTrackInfoDto);
-
-    const updatedTrack: Track = await this.tracksService.findWithFileById(
-      track.id,
+    const updatedTrack = await this.tracksService.editInfo(
+      track,
+      editTrackInfoDto,
     );
+
     return new TrackEntity(updatedTrack);
   }
 
-  @ApiOperation({ summary: 'Get track by id' })
-  @Public()
-  @Get(':id')
-  @CheckPolicies(ReadTrackHandler)
+  @Delete(':id/delete')
+  @CheckPolicies(EditTrackHandler)
   @UseGuards(PoliciesGuard)
-  @UseInterceptors(TransformTrackInterceptor)
-  // @UseInterceptors(ClassSerializerInterceptor)
-  getTrack(@Req() request: RequestWithTrack) {
-    return new TrackEntity(request.track);
+  async deleteTrack(@Req() request: RequestWithTrack): Promise<string> {
+    const track: Track = request.track;
+    await this.tracksService.deleteTrack(track);
+
+    return 'Track successfully deleted';
   }
 }

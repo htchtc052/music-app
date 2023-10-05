@@ -1,22 +1,22 @@
-import { AuthService } from './auth.service';
-import { ApiOperation } from '@nestjs/swagger';
-import { Public } from './decorators/public.decorator';
 import {
   Body,
   ClassSerializerInterceptor,
+  Controller,
   Post,
   Req,
   Request,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { ApiOperation } from '@nestjs/swagger';
 import { RegisterDto } from './dtos/register.dto';
 import { AuthResponse } from './responses/auth.response';
-import { JwtAuthGuard } from './guards/jwtAuthGuard';
 import { LoginDto } from './dtos/login.dto';
 import { TokensResponse } from './responses/tokens.response';
+import { Public } from './decorators/public.decorator';
 
-@UseGuards(JwtAuthGuard)
+@Controller('auth')
+//@UseGuards(JwtAuthGuard)
 export class AuthController {
   constructor(private authService: AuthService) {}
 
@@ -28,6 +28,7 @@ export class AuthController {
     return this.authService.register(registerDto);
   }
 
+  //
   @ApiOperation({ summary: 'Sign in user' })
   @Public()
   @Post('login')

@@ -37,33 +37,11 @@ export class TracksService {
     return { ...track, file };
   }
 
-  findById(id: number): Promise<Track> {
-    return this.prisma.track.findUnique({
-      where: {
-        id,
-      },
-    });
-  }
-
-  async editInfo(
-    track: Track,
-    editTrackInfoDto: EditTrackInfoDto,
-  ): Promise<void> {
-    await this.prisma.track.update({
-      where: { id: track.id },
-      data: {
-        title: editTrackInfoDto.title,
-        description: editTrackInfoDto.description,
-        hiddenDescription: editTrackInfoDto.hiddenDescription,
-        private: editTrackInfoDto.private,
-      },
-    });
-  }
-
   async findWithFileById(id: number): Promise<Track> {
     const track: Track = await this.prisma.track.findUnique({
       where: {
         id,
+        deletedAt: null,
       },
       include: {
         file: true,
@@ -78,9 +56,11 @@ export class TracksService {
   }
 
   async getTracksByUser(user: User, readAsOwner: boolean): Promise<Track[]> {
-    const where: { userId: number; private?: boolean } = {
-      userId: user.id,
-    };
+    const where: { userId: number; private?: boolean; deletedAt: Date | null } =
+      {
+        userId: user.id,
+        deletedAt: null,
+      };
 
     if (!readAsOwner) {
       where.private = false;
@@ -94,5 +74,34 @@ export class TracksService {
     });
 
     return tracks;
+  }
+
+  async editInfo(
+    track: Track,
+    editTrackInfoDto: EditTrackInfoDto,
+  ): Promise<Track> {
+    const updatedTrack: Track = await this.prisma.track.update({
+      where: { id: track.id },
+      data: {
+        title: editTrackInfoDto.title,
+        description: editTrackInfoDto.description,
+        hiddenDescription: editTrackInfoDto.hiddenDescription,
+        private: editTrackInfoDto.private,
+      },
+      include: {
+        file: true,
+      },
+    });
+
+    return updatedTrack;
+  }
+
+  async deleteTrack(track: Track): Promise<void> {
+    await this.prisma.track.update({
+      where: { id: track.id },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
   }
 }
